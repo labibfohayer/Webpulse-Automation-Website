@@ -1,0 +1,189 @@
+@import "lenis/dist/lenis.css";
+
+/* 120fps Smooth Scrolling Optimization (Sub-frame continuous physics) */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+html {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+::selection {
+  background: #fc7028;
+  color: #ffffff;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #0b0c10;
+}
+::-webkit-scrollbar-thumb {
+  background: #252836;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #fc7028;
+}
+
+.glow-orange {
+  box-shadow: 0 0 30px rgba(252, 112, 40, 0.25);
+}
+
+.glass-panel {
+  background: rgba(19, 19, 19, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* =========================================================
+   HERO AREA LANDSCAPE & PROPORTION ENFORCEMENT
+   Matches Original Agentra Landscape Aspect Ratio Exactly
+   ========================================================= */
+
+/* Force single-line wide gradient banner */
+.wg-hero-area .text-big-gradient {
+  white-space: nowrap !important;
+  font-size: clamp(28px, 6.3vw, 105px) !important;
+  letter-spacing: -0.04em !important;
+  line-height: 1.1 !important;
+  text-align: center !important;
+  padding: 35px 0 !important;
+  margin: 0 auto !important;
+  display: block !important;
+}
+
+@media (min-width: 1200px) {
+  .wg-hero-area .text-big-gradient {
+    padding: 42px 0 !important;
+  }
+  
+  .wg-hero-area .hero-area-content {
+    align-items: flex-start !important;
+    max-width: 1190px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding: 55px 0 65px !important;
+  }
+
+  .wg-hero-area .left-content {
+    max-width: 440px !important;
+  }
+}
+
+.wg-hero-area .left-content .sub-title {
+  margin-bottom: 14px !important;
+}
+
+.wg-hero-area .left-content .title {
+  font-size: clamp(32px, 3.2vw, 48px) !important;
+  line-height: 1.15 !important;
+  margin-bottom: 24px !important;
+}
+
+.wg-hero-area .left-content .desc {
+  font-size: 16px !important;
+  line-height: 1.6 !important;
+  margin-bottom: 32px !important;
+  max-width: 380px !important;
+  color: #a0a0a0 !important;
+}
+
+.wg-hero-area .image-hero {
+  max-width: 398px !important;
+  bottom: 0 !important;
+}
+
+.wg-hero-area .wg-quote-2 {
+  margin-top: 24px !important;
+}
+
+/* =========================================================
+   TESTIMONIALS SECTION FIX (100% Match with Original Theme)
+   ========================================================= */
+
+.section-testimonials.h-1 .section-testimonials-inner {
+  align-items: stretch !important;
+}
+
+.section-testimonials.h-1 .tes-item {
+  max-width: 806px !important;
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: row !important;
+  border-radius: 20px !important;
+}
+
+.section-testimonials.h-1 .sw-testimonials {
+  max-width: 376px !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+}
+
+.section-testimonials .sw-testimonials .swiper-wrapper {
+  height: 100% !important;
+}
+
+.section-testimonials .sw-testimonials .swiper-slide {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+}
+
+.section-testimonials .tes-item.no-img {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: 100% !important;
+  padding: 44px 36px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  border-radius: 20px !important;
+  box-sizing: border-box !important;
+}
+
+.section-testimonials .tes-item.no-img .item-content {
+  width: 100% !important;
+  max-width: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  justify-content: space-between !important;
+}
+
+.section-testimonials .tes-item .text-tes {
+  font-size: 16px !important;
+  line-height: 1.65 !important;
+  margin-bottom: 24px !important;
+  word-break: normal !important;
+  white-space: normal !important;
+  overflow-wrap: break-word !important;
+}
+
+.section-testimonials .tes-item .title {
+  margin-bottom: 20px !important;
+}
+
+.section-testimonials .tes-item .line {
+  margin-bottom: 20px !important;
+}
+
+@media (max-width: 1199px) {
+  .section-testimonials.h-1 .section-testimonials-inner {
+    flex-direction: column !important;
+  }
+  .section-testimonials.h-1 .sw-testimonials,
+  .section-testimonials.h-1 .tes-item {
+    max-width: 100% !important;
+  }
+}
