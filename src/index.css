@@ -558,4 +558,53 @@ body:not(.body-style-dark) .header-fixed:not(.header-sticky) .mobile-button span
   }
 }
 
+/* ==========================================================================
+   Project Cards Showcase & Logo Styling
+   ========================================================================== */
+.project-item .top-item .image {
+  background: #090a10 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 340px !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  position: relative !important;
+}
+
+.project-item .top-item .image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.project-item:hover .top-item .image img {
+  transform: scale(1.05) !important;
+}
+
+.project-item.style-3 .image {
+  background: #090a10 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  height: 380px !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+}
+
+.project-item.style-3 .image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center !important;
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.project-item.style-3:hover .image img {
+  transform: scale(1.05) !important;
+}
+
+
 
