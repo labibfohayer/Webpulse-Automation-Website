@@ -187,3 +187,110 @@ html {
     max-width: 100% !important;
   }
 }
+
+/* =========================================================
+   CONTACT FORM SERVICE DROPDOWN & CUSTOM SERVICE STYLES
+   ========================================================= */
+
+.form-contact .nice-select {
+  background: #ffffff !important;
+  border-radius: 14px !important;
+  height: 52px !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 20px !important;
+  cursor: pointer !important;
+  position: relative !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  transition: all 0.25s ease !important;
+}
+
+.form-contact .nice-select .current {
+  color: #111827 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: block !important;
+  max-width: 85% !important;
+}
+
+.form-contact .nice-select:before {
+  content: "" !important;
+  border-bottom: 2px solid #555 !important;
+  border-right: 2px solid #555 !important;
+  display: block !important;
+  height: 8px !important;
+  width: 8px !important;
+  position: absolute !important;
+  right: 18px !important;
+  top: 45% !important;
+  transform: rotate(45deg) translateY(-50%) !important;
+  transition: all 0.25s ease-in-out !important;
+}
+
+.form-contact .nice-select.open:before {
+  transform: rotate(-135deg) translateY(-50%) !important;
+  top: 55% !important;
+}
+
+.form-contact .nice-select .list {
+  background: #11141c !important;
+  border: 1px solid rgba(0, 210, 255, 0.35) !important;
+  border-radius: 14px !important;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 210, 255, 0.2) !important;
+  max-height: 280px !important;
+  overflow-y: auto !important;
+  position: absolute !important;
+  top: calc(100% + 6px) !important;
+  left: 0 !important;
+  width: 100% !important;
+  min-width: 280px !important;
+  z-index: 99999 !important;
+  padding: 6px !important;
+  margin: 0 !important;
+}
+
+.form-contact .nice-select .option {
+  color: #cbd5e1 !important;
+  font-size: 13.5px !important;
+  padding: 10px 14px !important;
+  border-radius: 8px !important;
+  line-height: 1.4 !important;
+  min-height: auto !important;
+  transition: all 0.15s ease !important;
+  cursor: pointer !important;
+  white-space: normal !important;
+}
+
+.form-contact .nice-select .option:hover {
+  background: rgba(0, 210, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+.form-contact .nice-select .option.selected {
+  background: rgba(0, 210, 255, 0.22) !important;
+  color: #00d2ff !important;
+  font-weight: 600 !important;
+}
+
+#custom-service-field input {
+  width: 100% !important;
+  background: #ffffff !important;
+  border-radius: 14px !important;
+  height: 52px !important;
+  padding: 0 20px !important;
+  font-size: 14px !important;
+  color: #111827 !important;
+  outline: none !important;
+  border: 1.5px solid #00d2ff !important;
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.2) !important;
+  transition: all 0.25s ease !important;
+}
+
+#custom-service-field input:focus {
+  border-color: #00d2ff !important;
+  box-shadow: 0 0 20px rgba(0, 210, 255, 0.35) !important;
+}
+

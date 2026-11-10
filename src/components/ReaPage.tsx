@@ -107,6 +107,54 @@ export const ReaPage: React.FC<ReaPageProps> = ({ html }) => {
 
     // 4. Contact Form & Lead Capture Submission Handler
     const contactForm = document.querySelector<HTMLFormElement>('.form-contact');
+    const serviceDropdown = document.getElementById('service-select-dropdown');
+    const customServiceField = document.getElementById('custom-service-field') as HTMLElement | null;
+    const customServiceInput = document.getElementById('custom_service_input') as HTMLInputElement | null;
+    const selectedServiceInput = document.getElementById('selected-service-type') as HTMLInputElement | null;
+
+    const onDropdownClick = (e: MouseEvent) => {
+      e.stopPropagation();
+      const target = e.target as HTMLElement;
+      const option = target.closest('.option') as HTMLElement | null;
+      if (option && serviceDropdown) {
+        const val = option.getAttribute('data-value') || option.textContent || '';
+        const currentSpan = serviceDropdown.querySelector('.current');
+        if (currentSpan) currentSpan.textContent = option.textContent;
+
+        serviceDropdown.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+        option.classList.add('selected');
+
+        if (selectedServiceInput) {
+          selectedServiceInput.value = val;
+        }
+
+        if (val === 'Other') {
+          if (customServiceField) {
+            customServiceField.style.display = 'block';
+            customServiceInput?.focus();
+          }
+        } else {
+          if (customServiceField) {
+            customServiceField.style.display = 'none';
+          }
+        }
+        serviceDropdown.classList.remove('open');
+      } else if (serviceDropdown) {
+        serviceDropdown.classList.toggle('open');
+      }
+    };
+
+    const onDocClick = (e: MouseEvent) => {
+      if (serviceDropdown && !serviceDropdown.contains(e.target as Node)) {
+        serviceDropdown.classList.remove('open');
+      }
+    };
+
+    if (serviceDropdown) {
+      serviceDropdown.addEventListener('click', onDropdownClick);
+      document.addEventListener('click', onDocClick);
+    }
+
     const handleContactSubmit = (e: Event) => {
       e.preventDefault();
       if (!contactForm) return;
@@ -116,8 +164,14 @@ export const ReaPage: React.FC<ReaPageProps> = ({ html }) => {
       const phone = (fd.get('phone') as string) || '';
       const message = (fd.get('message') as string) || (document.getElementById('mess') as HTMLTextAreaElement)?.value || '';
 
+      const serviceType = selectedServiceInput?.value || (fd.get('service_type') as string) || 'Website Automation';
+      const customVal = customServiceInput?.value?.trim() || '';
+      const finalService = (serviceType === 'Other' && customVal)
+        ? `Custom: ${customVal}`
+        : (serviceType === 'Other' ? 'Custom Service' : serviceType);
+
       const waMsg = encodeURIComponent(
-        `Hi Webpulse Automation! My name is ${name}. Email: ${email}, Phone: ${phone}. Inquiry: ${message}`
+        `Hi Webpulse Automation! My name is ${name}. Email: ${email}, Phone: ${phone}. Service: ${finalService}. Inquiry: ${message}`
       );
       const waUrl = `https://wa.me/8801908272574?text=${waMsg}`;
 
@@ -131,8 +185,8 @@ export const ReaPage: React.FC<ReaPageProps> = ({ html }) => {
               ✓
             </div>
             <h3 style="color: #ffffff; font-size: 22px; font-weight: 700; margin: 0 0 12px;">Inquiry Dispatched!</h3>
-            <p style="color: #b0b8c4; font-size: 14px; line-height: 1.6; margin: 0 0 24px;">
-              Thank you <strong style="color: #ffffff;">${name || 'there'}</strong>! Your message has been routed to our core team (<strong style="color: #00d2ff;">zayanarham07@gmail.com</strong>).
+            <p style="color: #b0b8c4; font-size: 14px; line-height: 1.6; margin: 0 0 16px;">
+              Thank you <strong style="color: #ffffff;">${name || 'there'}</strong>! Your message for <strong style="color: #00d2ff;">${finalService}</strong> has been routed to our core team (<strong style="color: #00d2ff;">zayanarham07@gmail.com</strong>).
             </p>
             <div style="display: flex; flex-direction: column; gap: 12px;">
               <a href="${waUrl}" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(90deg, #25D366, #128C7E); color: #ffffff; padding: 13px 20px; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: 14px;">
@@ -152,6 +206,12 @@ export const ReaPage: React.FC<ReaPageProps> = ({ html }) => {
       });
 
       contactForm.reset();
+      if (customServiceField) customServiceField.style.display = 'none';
+      if (serviceDropdown) {
+        const currentSpan = serviceDropdown.querySelector('.current');
+        if (currentSpan) currentSpan.textContent = 'Website Automation (ওয়েবসাইট অটোমেশন)';
+      }
+      if (selectedServiceInput) selectedServiceInput.value = 'Website Automation';
     };
 
     if (contactForm) {
@@ -215,6 +275,8 @@ export const ReaPage: React.FC<ReaPageProps> = ({ html }) => {
       if (scrollTopBtn) scrollTopBtn.removeEventListener('click', onScrollTop);
       if (mobileBtn) mobileBtn.removeEventListener('click', toggleMobileMenu);
       if (closeBtn) closeBtn.removeEventListener('click', closeMobileMenu);
+      if (serviceDropdown) serviceDropdown.removeEventListener('click', onDropdownClick);
+      document.removeEventListener('click', onDocClick);
       cleanupMotion();
     };
   }, [html]);

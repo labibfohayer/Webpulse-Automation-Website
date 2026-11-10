@@ -215,13 +215,39 @@ export const ContactSection: React.FC = () => {
                         outline: 'none'
                       }}
                     >
-                      <option value="AI Strategy & Automation">AI Strategy & Automation</option>
-                      <option value="Custom LLM Fine-Tuning">Custom LLM Fine-Tuning</option>
-                      <option value="Enterprise Architecture">Enterprise Architecture</option>
-                      <option value="UI/UX Generative Design">UI/UX Generative Design</option>
+                      <option value="Website Automation">Website Automation (ওয়েবসাইট অটোমেশন)</option>
+                      <option value="Page Automation">Page Automation (পেজ অটোমেশন)</option>
+                      <option value="Website Making">Website Making (ওয়েবসাইট মেকিং)</option>
+                      <option value="Web Development">Web Development (ওয়েব ডেভেলপমেন্ট)</option>
+                      <option value="Web Design">Web Design (ওয়েব ডিজাইন)</option>
+                      <option value="UI/UX Design">UI/UX Design (ইউআই ইউএক্স ডিজাইন)</option>
+                      <option value="Other">Other / Custom Service (অন্য কিছু / কাস্টম সার্ভিস)</option>
                     </select>
                   </fieldset>
                 </div>
+
+                {formData.subject === 'Other' && (
+                  <fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
+                    <label htmlFor="custom_subject" className="text-body-2 letter-space--2 fw-5 title-input" style={{ display: 'block', color: '#aaa', fontSize: '14px', marginBottom: '8px' }}>
+                      Specify Custom Service / কাস্টম সার্ভিস লিখুন
+                    </label>
+                    <input
+                      type="text"
+                      id="custom_subject"
+                      placeholder="Type what service you need..."
+                      style={{
+                        width: '100%',
+                        background: 'rgba(255,255,255,0.04)',
+                        border: '1px solid rgba(0, 210, 255, 0.4)',
+                        borderRadius: '12px',
+                        padding: '14px 18px',
+                        color: '#fff',
+                        fontSize: '15px',
+                        outline: 'none'
+                      }}
+                    />
+                  </fieldset>
+                )}
 
                 <fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
                   <label htmlFor="mess" className="text-body-2 letter-space--2 fw-5 title-input" style={{ display: 'block', color: '#aaa', fontSize: '14px', marginBottom: '8px' }}>
