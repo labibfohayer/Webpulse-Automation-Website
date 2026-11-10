@@ -236,6 +236,9 @@ html {
 }
 
 .form-contact .nice-select .list {
+  display: none !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
   background: #ffffff !important;
   border: 1px solid #e2e8f0 !important;
   border-radius: 14px !important;
@@ -253,6 +256,13 @@ html {
   z-index: 99999 !important;
   padding: 6px !important;
   margin: 0 !important;
+}
+
+.form-contact .nice-select.open .list {
+  display: block !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
 }
 
 .form-contact .nice-select .option {
@@ -281,7 +291,8 @@ html {
   font-weight: 600 !important;
 }
 
-#custom-service-field input {
+#custom-service-field input,
+.custom-service-field input {
   width: 100% !important;
   background: #ffffff !important;
   border-radius: 14px !important;
@@ -296,7 +307,8 @@ html {
   transition: all 0.25s ease !important;
 }
 
-#custom-service-field input:focus {
+#custom-service-field input:focus,
+.custom-service-field input:focus {
   border-color: #0284c7 !important;
   box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15) !important;
 }

@@ -147,183 +147,196 @@ export const ReaPage: React.FC<ReaPageProps> = ({ html }) => {
     };
     navLinks?.forEach(link => link.addEventListener('click', handleNavLinkClick));
 
-    // 4. Contact Form & Lead Capture Submission Handler
-    const contactForm = document.querySelector<HTMLFormElement>('.form-contact');
-    const serviceDropdown = document.getElementById('service-select-dropdown');
-    const customServiceField = document.getElementById('custom-service-field') as HTMLElement | null;
-    const customServiceInput = document.getElementById('custom_service_input') as HTMLInputElement | null;
-    const selectedServiceInput = document.getElementById('selected-service-type') as HTMLInputElement | null;
+    // 4. Contact Form & Lead Capture Submission Handler (Universal across all pages)
+    const contactForms = document.querySelectorAll<HTMLFormElement>('.form-contact');
+    const contactFormCleanups: (() => void)[] = [];
 
-    const onDropdownClick = (e: MouseEvent) => {
-      e.stopPropagation();
-      const target = e.target as HTMLElement;
-      const option = target.closest('.option') as HTMLElement | null;
-      if (option && serviceDropdown) {
-        const val = option.getAttribute('data-value') || option.textContent || '';
-        const currentSpan = serviceDropdown.querySelector('.current');
-        if (currentSpan) currentSpan.textContent = option.textContent;
+    contactForms.forEach((form) => {
+      const serviceDropdown = form.querySelector('.nice-select');
+      const customServiceField = form.querySelector('.custom-service-field, #custom-service-field') as HTMLElement | null;
+      const customServiceInput = form.querySelector('.custom-service-input, #custom_service_input') as HTMLInputElement | null;
+      const selectedServiceInput = form.querySelector('.selected-service-type, #selected-service-type') as HTMLInputElement | null;
 
-        serviceDropdown.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
-        option.classList.add('selected');
+      if (serviceDropdown) {
+        const onDropdownClick = (e: MouseEvent) => {
+          e.stopPropagation();
+          const target = e.target as HTMLElement;
+          const option = target.closest('.option') as HTMLElement | null;
+          if (option) {
+            const val = option.getAttribute('data-value') || option.textContent || '';
+            const currentSpan = serviceDropdown.querySelector('.current');
+            if (currentSpan) currentSpan.textContent = option.textContent;
 
-        if (selectedServiceInput) {
-          selectedServiceInput.value = val;
+            serviceDropdown.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+            option.classList.add('selected');
+
+            if (selectedServiceInput) {
+              selectedServiceInput.value = val;
+            }
+
+            if (val === 'Other') {
+              if (customServiceField) {
+                customServiceField.style.display = 'block';
+                customServiceInput?.focus();
+              }
+            } else {
+              if (customServiceField) {
+                customServiceField.style.display = 'none';
+              }
+            }
+            serviceDropdown.classList.remove('open');
+          } else {
+            // Close other dropdowns first
+            document.querySelectorAll('.nice-select.open').forEach(el => {
+              if (el !== serviceDropdown) el.classList.remove('open');
+            });
+            serviceDropdown.classList.toggle('open');
+          }
+        };
+
+        serviceDropdown.addEventListener('click', onDropdownClick as EventListener);
+        contactFormCleanups.push(() => serviceDropdown.removeEventListener('click', onDropdownClick as EventListener));
+      }
+
+      const handleContactSubmit = (e: Event) => {
+        e.preventDefault();
+        const fd = new FormData(form);
+        const name = (fd.get('name') as string) || (form.querySelector('input[name="name"]') as HTMLInputElement)?.value || '';
+        const email = (fd.get('email') as string) || (form.querySelector('input[name="email"]') as HTMLInputElement)?.value || '';
+        const phone = (fd.get('phone') as string) || (form.querySelector('input[name="phone"]') as HTMLInputElement)?.value || '';
+        const message = (fd.get('message') as string) || (fd.get('mess') as string) || (form.querySelector('textarea') as HTMLTextAreaElement)?.value || '';
+
+        const serviceType = selectedServiceInput?.value || (fd.get('service_type') as string) || 'Website Automation';
+        const customVal = customServiceInput?.value?.trim() || '';
+        const finalService = (serviceType === 'Other' && customVal)
+          ? `Custom: ${customVal}`
+          : (serviceType === 'Other' ? 'Custom Service' : serviceType);
+
+        // 1. Persist lead in browser localStorage (Zero data loss guarantee)
+        const inquiryPayload = {
+          name,
+          email,
+          phone,
+          service: finalService,
+          message,
+          timestamp: new Date().toISOString(),
+        };
+        try {
+          const storedInquiries = JSON.parse(localStorage.getItem('webpulse_inquiries') || '[]');
+          storedInquiries.unshift(inquiryPayload);
+          localStorage.setItem('webpulse_inquiries', JSON.stringify(storedInquiries));
+        } catch (err) {
+          console.warn('LocalStorage error:', err);
         }
 
-        if (val === 'Other') {
-          if (customServiceField) {
-            customServiceField.style.display = 'block';
-            customServiceInput?.focus();
-          }
-        } else {
-          if (customServiceField) {
-            customServiceField.style.display = 'none';
-          }
+        // 2. Dispatch to Web3Forms (if configured)
+        if (emailConfig.web3formsAccessKey) {
+          const web3FormData = new FormData();
+          web3FormData.append('access_key', emailConfig.web3formsAccessKey);
+          web3FormData.append('from_name', 'Webpulse Automation Leads');
+          web3FormData.append('subject', `New Client Lead: ${name} - ${finalService}`);
+          web3FormData.append('name', name);
+          web3FormData.append('email', email);
+          web3FormData.append('phone', phone);
+          web3FormData.append('service', finalService);
+          web3FormData.append('message', message);
+
+          fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: web3FormData,
+          }).catch((err) => console.error('Web3Forms dispatch error:', err));
         }
-        serviceDropdown.classList.remove('open');
-      } else if (serviceDropdown) {
-        serviceDropdown.classList.toggle('open');
-      }
-    };
 
-    const onDocClick = (e: MouseEvent) => {
-      if (serviceDropdown && !serviceDropdown.contains(e.target as Node)) {
-        serviceDropdown.classList.remove('open');
-      }
-    };
+        // 3. Dispatch to Custom Webhook (n8n, Make, Zapier, etc.)
+        if (emailConfig.customWebhookUrl) {
+          fetch(emailConfig.customWebhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(inquiryPayload),
+          }).catch((err) => console.error('Custom Webhook dispatch error:', err));
+        }
 
-    if (serviceDropdown) {
-      serviceDropdown.addEventListener('click', onDropdownClick);
-      document.addEventListener('click', onDocClick);
-    }
+        // 4. Dispatch to EmailJS REST API (if configured)
+        if (emailConfig.emailjsServiceId && emailConfig.emailjsPublicKey) {
+          fetch('https://api.emailjs.com/api/v1.0/email/send', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              service_id: emailConfig.emailjsServiceId,
+              template_id: emailConfig.emailjsTemplateId,
+              user_id: emailConfig.emailjsPublicKey,
+              template_params: {
+                name,
+                email,
+                phone,
+                service: finalService,
+                message,
+                time: new Date().toLocaleString(),
+              },
+            }),
+          }).catch((err) => console.error('EmailJS dispatch error:', err));
+        }
 
-    const handleContactSubmit = (e: Event) => {
-      e.preventDefault();
-      if (!contactForm) return;
-      const fd = new FormData(contactForm);
-      const name = (fd.get('name') as string) || '';
-      const email = (fd.get('email') as string) || '';
-      const phone = (fd.get('phone') as string) || '';
-      const message = (fd.get('message') as string) || (document.getElementById('mess') as HTMLTextAreaElement)?.value || '';
+        const waMsg = encodeURIComponent(
+          `Hi Webpulse Automation! My name is ${name}. Email: ${email}, Phone: ${phone}. Service: ${finalService}. Inquiry: ${message}`
+        );
+        const waUrl = `https://wa.me/8801908272574?text=${waMsg}`;
 
-      const serviceType = selectedServiceInput?.value || (fd.get('service_type') as string) || 'Website Automation';
-      const customVal = customServiceInput?.value?.trim() || '';
-      const finalService = (serviceType === 'Other' && customVal)
-        ? `Custom: ${customVal}`
-        : (serviceType === 'Other' ? 'Custom Service' : serviceType);
-
-      // 1. Persist lead in browser localStorage (Zero data loss guarantee)
-      const inquiryPayload = {
-        name,
-        email,
-        phone,
-        service: finalService,
-        message,
-        timestamp: new Date().toISOString(),
-      };
-      try {
-        const storedInquiries = JSON.parse(localStorage.getItem('webpulse_inquiries') || '[]');
-        storedInquiries.unshift(inquiryPayload);
-        localStorage.setItem('webpulse_inquiries', JSON.stringify(storedInquiries));
-      } catch (err) {
-        console.warn('LocalStorage error:', err);
-      }
-
-      // 2. Dispatch to Web3Forms (if configured)
-      if (emailConfig.web3formsAccessKey) {
-        const web3FormData = new FormData();
-        web3FormData.append('access_key', emailConfig.web3formsAccessKey);
-        web3FormData.append('from_name', 'Webpulse Automation Leads');
-        web3FormData.append('subject', `New Client Lead: ${name} - ${finalService}`);
-        web3FormData.append('name', name);
-        web3FormData.append('email', email);
-        web3FormData.append('phone', phone);
-        web3FormData.append('service', finalService);
-        web3FormData.append('message', message);
-
-        fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          body: web3FormData,
-        }).catch((err) => console.error('Web3Forms dispatch error:', err));
-      }
-
-      // 3. Dispatch to Custom Webhook (n8n, Make, Zapier, etc.)
-      if (emailConfig.customWebhookUrl) {
-        fetch(emailConfig.customWebhookUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(inquiryPayload),
-        }).catch((err) => console.error('Custom Webhook dispatch error:', err));
-      }
-
-      // 4. Dispatch to EmailJS REST API (if configured)
-      if (emailConfig.emailjsServiceId && emailConfig.emailjsPublicKey) {
-        fetch('https://api.emailjs.com/api/v1.0/email/send', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            service_id: emailConfig.emailjsServiceId,
-            template_id: emailConfig.emailjsTemplateId,
-            user_id: emailConfig.emailjsPublicKey,
-            template_params: {
-              name,
-              email,
-              phone,
-              service: finalService,
-              message,
-              time: new Date().toLocaleString(),
-            },
-          }),
-        }).catch((err) => console.error('EmailJS dispatch error:', err));
-      }
-
-      const waMsg = encodeURIComponent(
-        `Hi Webpulse Automation! My name is ${name}. Email: ${email}, Phone: ${phone}. Service: ${finalService}. Inquiry: ${message}`
-      );
-      const waUrl = `https://wa.me/8801908272574?text=${waMsg}`;
-
-      // Show luxury modal
-      const modal = document.createElement('div');
-      modal.id = 'webpulse-success-modal';
-      modal.innerHTML = `
-        <div style="position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 999999; display: flex; align-items: center; justify-content: center; padding: 20px;">
-          <div style="background: #11141c; border: 1px solid rgba(0, 210, 255, 0.4); border-radius: 24px; padding: 36px 30px; max-width: 480px; width: 100%; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 30px rgba(0, 210, 255, 0.2);">
-            <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(0, 210, 255, 0.15); border: 2px solid #00d2ff; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 28px; color: #00d2ff;">
-              ✓
-            </div>
-            <h3 style="color: #ffffff; font-size: 22px; font-weight: 700; margin: 0 0 12px;">Inquiry Dispatched!</h3>
-            <p style="color: #b0b8c4; font-size: 14px; line-height: 1.6; margin: 0 0 16px;">
-              Thank you <strong style="color: #ffffff;">${name || 'there'}</strong>! Your message for <strong style="color: #00d2ff;">${finalService}</strong> has been received and routed to our executive team (<strong style="color: #00d2ff;">zayanarham07@gmail.com</strong>).
-            </p>
-            <div style="display: flex; flex-direction: column; gap: 12px;">
-              <a href="${waUrl}" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(90deg, #25D366, #128C7E); color: #ffffff; padding: 13px 20px; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: 14px;">
-                💬 Open WhatsApp for Instant 5-Min Reply
-              </a>
-              <button id="close-webpulse-modal" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #ffffff; padding: 11px 20px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 13px;">
-                Close Window
-              </button>
+        // Show luxury modal
+        const modal = document.createElement('div');
+        modal.id = 'webpulse-success-modal';
+        modal.innerHTML = `
+          <div style="position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 999999; display: flex; align-items: center; justify-content: center; padding: 20px;">
+            <div style="background: #11141c; border: 1px solid rgba(0, 210, 255, 0.4); border-radius: 24px; padding: 36px 30px; max-width: 480px; width: 100%; text-align: center; box-shadow: 0 25px 60px rgba(0,0,0,0.8), 0 0 30px rgba(0, 210, 255, 0.2);">
+              <div style="width: 60px; height: 60px; border-radius: 50%; background: rgba(0, 210, 255, 0.15); border: 2px solid #00d2ff; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; font-size: 28px; color: #00d2ff;">
+                ✓
+              </div>
+              <h3 style="color: #ffffff; font-size: 22px; font-weight: 700; margin: 0 0 12px;">Inquiry Dispatched!</h3>
+              <p style="color: #b0b8c4; font-size: 14px; line-height: 1.6; margin: 0 0 16px;">
+                Thank you <strong style="color: #ffffff;">${name || 'there'}</strong>! Your message for <strong style="color: #00d2ff;">${finalService}</strong> has been received and routed to our executive team (<strong style="color: #00d2ff;">zayanarham07@gmail.com</strong>).
+              </p>
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                <a href="${waUrl}" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(90deg, #25D366, #128C7E); color: #ffffff; padding: 13px 20px; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: 14px;">
+                  💬 Open WhatsApp for Instant 5-Min Reply
+                </a>
+                <button id="close-webpulse-modal" style="background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15); color: #ffffff; padding: 11px 20px; border-radius: 12px; font-weight: 600; cursor: pointer; font-size: 13px;">
+                  Close Window
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      `;
-      document.body.appendChild(modal);
+        `;
+        document.body.appendChild(modal);
 
-      document.getElementById('close-webpulse-modal')?.addEventListener('click', () => {
-        modal.remove();
+        document.getElementById('close-webpulse-modal')?.addEventListener('click', () => {
+          modal.remove();
+        });
+
+        form.reset();
+        if (customServiceField) customServiceField.style.display = 'none';
+        if (serviceDropdown) {
+          const currentSpan = serviceDropdown.querySelector('.current');
+          if (currentSpan) currentSpan.textContent = 'Select Service';
+          serviceDropdown.querySelectorAll('.option').forEach((opt, idx) => {
+            if (idx === 0) opt.classList.add('selected');
+            else opt.classList.remove('selected');
+          });
+        }
+        if (selectedServiceInput) selectedServiceInput.value = 'Website Automation';
+      };
+
+      form.addEventListener('submit', handleContactSubmit);
+      contactFormCleanups.push(() => form.removeEventListener('submit', handleContactSubmit));
+    });
+
+    const onDocClick = (e: MouseEvent) => {
+      document.querySelectorAll('.nice-select.open').forEach(el => {
+        if (!el.contains(e.target as Node)) {
+          el.classList.remove('open');
+        }
       });
-
-      contactForm.reset();
-      if (customServiceField) customServiceField.style.display = 'none';
-      if (serviceDropdown) {
-        const currentSpan = serviceDropdown.querySelector('.current');
-        if (currentSpan) currentSpan.textContent = 'Website Automation';
-      }
-      if (selectedServiceInput) selectedServiceInput.value = 'Website Automation';
     };
-
-    if (contactForm) {
-      contactForm.addEventListener('submit', handleContactSubmit);
-    }
+    document.addEventListener('click', onDocClick);
 
     // 5. Footer Newsletter Subscription Handler (Auto-Save to List)
     const newsletterForms = document.querySelectorAll<HTMLFormElement>('.form-newsletter');
@@ -426,7 +439,7 @@ export const ReaPage: React.FC<ReaPageProps> = ({ html }) => {
       if (backdrop) backdrop.removeEventListener('click', closeMobileMenu);
       navMbLinks?.forEach(link => link.removeEventListener('click', handleSubMenuClick));
       navLinks?.forEach(link => link.removeEventListener('click', handleNavLinkClick));
-      if (serviceDropdown) serviceDropdown.removeEventListener('click', onDropdownClick);
+      contactFormCleanups.forEach(cleanup => cleanup());
       document.removeEventListener('click', onDocClick);
       cleanupMotion();
     };
