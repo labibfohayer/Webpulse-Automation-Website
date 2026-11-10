@@ -83,27 +83,68 @@ export const ReaPage: React.FC<ReaPageProps> = ({ html }) => {
       progressWrap.addEventListener('click', onScrollTop);
     }
 
-    // 3. Mobile Navigation Menu Toggle
+    // 3. Mobile Navigation Menu Toggle (Three-hyphen hamburger)
     const mobileBtn = document.querySelector<HTMLElement>('.mobile-button');
-    const mobileCanvas = document.querySelector<HTMLElement>('.nav-mb-wrapper, .canvas-nav-mb, .mobile-nav-overlay');
-    const closeBtn = document.querySelector<HTMLElement>('.close-nav-mb, .icon-close');
+    const mobileCanvas = document.querySelector<HTMLElement>('.offcanvas-mobile, .offcanvas.offcanvas-start');
+    const backdrop = document.querySelector<HTMLElement>('.offcanvas-backdrop');
+    const closeBtn = document.querySelector<HTMLElement>('.icon-close, .close-nav-mb');
 
-    const toggleMobileMenu = (e: Event) => {
+    const openMobileMenu = (e: Event) => {
       e.preventDefault();
+      e.stopPropagation();
       if (mobileCanvas) {
-        mobileCanvas.classList.toggle('open');
+        mobileCanvas.classList.add('show', 'open');
+        mobileCanvas.style.visibility = 'visible';
+        mobileCanvas.style.transform = 'none';
       }
+      if (backdrop) {
+        backdrop.classList.add('show');
+        backdrop.style.display = 'block';
+        backdrop.style.opacity = '1';
+      }
+      document.body.style.overflow = 'hidden';
     };
 
-    const closeMobileMenu = (e: Event) => {
-      e.preventDefault();
+    const closeMobileMenu = (e?: Event) => {
+      if (e) e.preventDefault();
       if (mobileCanvas) {
-        mobileCanvas.classList.remove('open');
+        mobileCanvas.classList.remove('show', 'open');
+        mobileCanvas.style.transform = '';
+        mobileCanvas.style.visibility = '';
       }
+      if (backdrop) {
+        backdrop.classList.remove('show');
+        backdrop.style.display = 'none';
+        backdrop.style.opacity = '0';
+      }
+      document.body.style.overflow = '';
     };
 
-    if (mobileBtn) mobileBtn.addEventListener('click', toggleMobileMenu);
+    if (mobileBtn) mobileBtn.addEventListener('click', openMobileMenu);
     if (closeBtn) closeBtn.addEventListener('click', closeMobileMenu);
+    if (backdrop) backdrop.addEventListener('click', closeMobileMenu);
+
+    // Accordion submenu toggle
+    const navMbLinks = mobileCanvas?.querySelectorAll<HTMLElement>('.nav-mb-item > a.mb-menu-link');
+    const handleSubMenuClick = (e: Event) => {
+      const link = e.currentTarget as HTMLElement;
+      const parent = link.closest('.nav-mb-item');
+      const collapse = parent?.querySelector('.sub-nav-collapse');
+      if (collapse) {
+        e.preventDefault();
+        parent?.classList.toggle('open');
+        const isOpen = parent?.classList.contains('open');
+        link.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      }
+    };
+    navMbLinks?.forEach(link => link.addEventListener('click', handleSubMenuClick));
+
+    // Nav link click auto-closes drawer
+    const navLinks = mobileCanvas?.querySelectorAll<HTMLAnchorElement>('.sub-nav-link, .nav-mb-item:not(.has-sub_menu) > a.mb-menu-link');
+    const handleNavLinkClick = () => {
+      closeMobileMenu();
+    };
+    navLinks?.forEach(link => link.addEventListener('click', handleNavLinkClick));
 
     // 4. Contact Form & Lead Capture Submission Handler
     const contactForm = document.querySelector<HTMLFormElement>('.form-contact');
@@ -273,8 +314,11 @@ export const ReaPage: React.FC<ReaPageProps> = ({ html }) => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
       if (scrollTopBtn) scrollTopBtn.removeEventListener('click', onScrollTop);
-      if (mobileBtn) mobileBtn.removeEventListener('click', toggleMobileMenu);
+      if (mobileBtn) mobileBtn.removeEventListener('click', openMobileMenu);
       if (closeBtn) closeBtn.removeEventListener('click', closeMobileMenu);
+      if (backdrop) backdrop.removeEventListener('click', closeMobileMenu);
+      navMbLinks?.forEach(link => link.removeEventListener('click', handleSubMenuClick));
+      navLinks?.forEach(link => link.removeEventListener('click', handleNavLinkClick));
       if (serviceDropdown) serviceDropdown.removeEventListener('click', onDropdownClick);
       document.removeEventListener('click', onDocClick);
       cleanupMotion();

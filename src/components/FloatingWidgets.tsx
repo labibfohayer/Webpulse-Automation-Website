@@ -6,7 +6,7 @@ export const FloatingWidgets: React.FC = () => {
   const whatsappUrl = "https://wa.me/8801908272574?text=Hi%20Webpulse%20Automation!%20I%20would%20like%20to%20discuss%20a%20project.";
 
   return (
-    <div style={{ position: 'fixed', bottom: '28px', right: '28px', zIndex: 99999, fontFamily: 'var(--font-dm-sans, sans-serif)' }}>
+    <div className="webpulse-floating-whatsapp" style={{ position: 'fixed', bottom: '28px', right: '28px', zIndex: 99999, fontFamily: 'var(--font-dm-sans, sans-serif)' }}>
       {/* Floating Action Menu Popover */}
       {isOpen && (
         <div
