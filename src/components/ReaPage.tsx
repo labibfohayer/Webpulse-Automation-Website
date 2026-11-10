@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { initSiteAnimations } from '../utils/motion';
 import { getLenis } from '../utils/lenis';
+import { emailConfig } from '../config/emailConfig';
 
 interface ReaPageProps {
   html: string;
@@ -211,6 +212,71 @@ export const ReaPage: React.FC<ReaPageProps> = ({ html }) => {
         ? `Custom: ${customVal}`
         : (serviceType === 'Other' ? 'Custom Service' : serviceType);
 
+      // 1. Persist lead in browser localStorage (Zero data loss guarantee)
+      const inquiryPayload = {
+        name,
+        email,
+        phone,
+        service: finalService,
+        message,
+        timestamp: new Date().toISOString(),
+      };
+      try {
+        const storedInquiries = JSON.parse(localStorage.getItem('webpulse_inquiries') || '[]');
+        storedInquiries.unshift(inquiryPayload);
+        localStorage.setItem('webpulse_inquiries', JSON.stringify(storedInquiries));
+      } catch (err) {
+        console.warn('LocalStorage error:', err);
+      }
+
+      // 2. Dispatch to Web3Forms (if configured)
+      if (emailConfig.web3formsAccessKey) {
+        fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: emailConfig.web3formsAccessKey,
+            from_name: 'Webpulse Lead Automation',
+            subject: `New Client Lead: ${name} - ${finalService}`,
+            name,
+            email,
+            phone,
+            service: finalService,
+            message,
+          }),
+        }).catch((err) => console.error('Web3Forms dispatch error:', err));
+      }
+
+      // 3. Dispatch to Custom Webhook (n8n, Make, Zapier, etc.)
+      if (emailConfig.customWebhookUrl) {
+        fetch(emailConfig.customWebhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(inquiryPayload),
+        }).catch((err) => console.error('Custom Webhook dispatch error:', err));
+      }
+
+      // 4. Dispatch to EmailJS REST API (if configured)
+      if (emailConfig.emailjsServiceId && emailConfig.emailjsPublicKey) {
+        fetch('https://api.emailjs.com/api/v1.0/email/send', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            service_id: emailConfig.emailjsServiceId,
+            template_id: emailConfig.emailjsTemplateId,
+            user_id: emailConfig.emailjsPublicKey,
+            template_params: {
+              name,
+              email,
+              phone,
+              service: finalService,
+              message,
+              time: new Date().toLocaleString(),
+            },
+          }),
+        }).catch((err) => console.error('EmailJS dispatch error:', err));
+      }
+
       const waMsg = encodeURIComponent(
         `Hi Webpulse Automation! My name is ${name}. Email: ${email}, Phone: ${phone}. Service: ${finalService}. Inquiry: ${message}`
       );
@@ -227,7 +293,7 @@ export const ReaPage: React.FC<ReaPageProps> = ({ html }) => {
             </div>
             <h3 style="color: #ffffff; font-size: 22px; font-weight: 700; margin: 0 0 12px;">Inquiry Dispatched!</h3>
             <p style="color: #b0b8c4; font-size: 14px; line-height: 1.6; margin: 0 0 16px;">
-              Thank you <strong style="color: #ffffff;">${name || 'there'}</strong>! Your message for <strong style="color: #00d2ff;">${finalService}</strong> has been routed to our core team (<strong style="color: #00d2ff;">zayanarham07@gmail.com</strong>).
+              Thank you <strong style="color: #ffffff;">${name || 'there'}</strong>! Your message for <strong style="color: #00d2ff;">${finalService}</strong> has been received and routed to our executive team (<strong style="color: #00d2ff;">zayanarham07@gmail.com</strong>).
             </p>
             <div style="display: flex; flex-direction: column; gap: 12px;">
               <a href="${waUrl}" target="_blank" rel="noopener noreferrer" style="display: flex; align-items: center; justify-content: center; gap: 8px; background: linear-gradient(90deg, #25D366, #128C7E); color: #ffffff; padding: 13px 20px; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: 14px;">
@@ -259,13 +325,50 @@ export const ReaPage: React.FC<ReaPageProps> = ({ html }) => {
       contactForm.addEventListener('submit', handleContactSubmit);
     }
 
-    // 5. Footer Newsletter Subscription Handler
+    // 5. Footer Newsletter Subscription Handler (Auto-Save to List)
     const newsletterForms = document.querySelectorAll<HTMLFormElement>('.form-newsletter');
     const handleNewsletterSubmit = (e: Event) => {
       e.preventDefault();
       const form = e.currentTarget as HTMLFormElement;
       const input = form.querySelector('input[type="email"]') as HTMLInputElement;
-      const email = input?.value || '';
+      const email = input?.value?.trim() || '';
+      if (!email) return;
+
+      // 1. Save subscriber email into browser persistent list
+      const subItem = { email, date: new Date().toISOString() };
+      try {
+        const stored = JSON.parse(localStorage.getItem('webpulse_subscribers') || '[]');
+        if (!stored.some((item: any) => item.email === email)) {
+          stored.unshift(subItem);
+          localStorage.setItem('webpulse_subscribers', JSON.stringify(stored));
+        }
+      } catch (err) {
+        console.warn('Subscribers storage error:', err);
+      }
+
+      // 2. Dispatch to Web3Forms (if configured)
+      if (emailConfig.web3formsAccessKey) {
+        fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: emailConfig.web3formsAccessKey,
+            from_name: 'Webpulse Newsletter',
+            subject: `📬 New Newsletter Subscriber: ${email}`,
+            email,
+            message: `New subscriber joined Webpulse Automation updates: ${email}`,
+          }),
+        }).catch((err) => console.error('Newsletter Web3Forms dispatch error:', err));
+      }
+
+      // 3. Dispatch to Custom Webhook (if configured)
+      if (emailConfig.customWebhookUrl) {
+        fetch(emailConfig.customWebhookUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ type: 'newsletter_subscription', email, timestamp: new Date().toISOString() }),
+        }).catch((err) => console.error('Newsletter webhook error:', err));
+      }
 
       const toast = document.createElement('div');
       toast.style.cssText = `
@@ -307,6 +410,10 @@ export const ReaPage: React.FC<ReaPageProps> = ({ html }) => {
     };
 
     newsletterForms.forEach(form => form.addEventListener('submit', handleNewsletterSubmit));
+
+    // Expose admin lead/subscriber retrieval helpers
+    (window as any).getWebpulseLeads = () => JSON.parse(localStorage.getItem('webpulse_inquiries') || '[]');
+    (window as any).getWebpulseSubscribers = () => JSON.parse(localStorage.getItem('webpulse_subscribers') || '[]');
 
     // 6. Initialize Master Kinetic Motion & Animations
     const cleanupMotion = initSiteAnimations();
