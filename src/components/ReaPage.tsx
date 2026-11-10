@@ -231,19 +231,19 @@ export const ReaPage: React.FC<ReaPageProps> = ({ html }) => {
 
       // 2. Dispatch to Web3Forms (if configured)
       if (emailConfig.web3formsAccessKey) {
+        const web3FormData = new FormData();
+        web3FormData.append('access_key', emailConfig.web3formsAccessKey);
+        web3FormData.append('from_name', 'Webpulse Automation Leads');
+        web3FormData.append('subject', `New Client Lead: ${name} - ${finalService}`);
+        web3FormData.append('name', name);
+        web3FormData.append('email', email);
+        web3FormData.append('phone', phone);
+        web3FormData.append('service', finalService);
+        web3FormData.append('message', message);
+
         fetch('https://api.web3forms.com/submit', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({
-            access_key: emailConfig.web3formsAccessKey,
-            from_name: 'Webpulse Lead Automation',
-            subject: `New Client Lead: ${name} - ${finalService}`,
-            name,
-            email,
-            phone,
-            service: finalService,
-            message,
-          }),
+          body: web3FormData,
         }).catch((err) => console.error('Web3Forms dispatch error:', err));
       }
 
@@ -348,16 +348,16 @@ export const ReaPage: React.FC<ReaPageProps> = ({ html }) => {
 
       // 2. Dispatch to Web3Forms (if configured)
       if (emailConfig.web3formsAccessKey) {
+        const web3NewsletterData = new FormData();
+        web3NewsletterData.append('access_key', emailConfig.web3formsAccessKey);
+        web3NewsletterData.append('from_name', 'Webpulse Automation Newsletter');
+        web3NewsletterData.append('subject', `📬 New Newsletter Subscriber: ${email}`);
+        web3NewsletterData.append('email', email);
+        web3NewsletterData.append('message', `A new visitor has subscribed to Webpulse Automation updates: ${email}`);
+
         fetch('https://api.web3forms.com/submit', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({
-            access_key: emailConfig.web3formsAccessKey,
-            from_name: 'Webpulse Newsletter',
-            subject: `📬 New Newsletter Subscriber: ${email}`,
-            email,
-            message: `New subscriber joined Webpulse Automation updates: ${email}`,
-          }),
+          body: web3NewsletterData,
         }).catch((err) => console.error('Newsletter Web3Forms dispatch error:', err));
       }
 

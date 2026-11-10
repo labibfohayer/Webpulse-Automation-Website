@@ -18,7 +18,7 @@
  */
 export const emailConfig = {
   // Web3Forms Access Key (e.g., 'a1b2c3d4-e5f6-7890-abcd-ef1234567890')
-  web3formsAccessKey: '',
+  web3formsAccessKey: 'cb291425-e605-444c-968d-0bfded6ba122',
 
   // EmailJS Configuration
   emailjsServiceId: '',
