@@ -80,11 +80,11 @@ const AppContent: React.FC = () => {
       <Route path="/service-details/:slug" element={<ServiceDetailsPage />} />
       <Route path="/service-details" element={<ServiceDetailsPage />} />
       <Route path="/pricing" element={<Navigate to="/service" replace />} />
-      <Route path="/team" element={<TeamPage />} />
+      <Route path="/team" element={<Navigate to="/about" replace />} />
       <Route path="/faq" element={<FaqPage />} />
-      <Route path="/blog-standard" element={<BlogPage />} />
-      <Route path="/blog-details/:slug" element={<BlogDetailsPage />} />
-      <Route path="/blog-details" element={<BlogDetailsPage />} />
+      <Route path="/blog-standard" element={<Navigate to="/service" replace />} />
+      <Route path="/blog-details/:slug" element={<Navigate to="/service" replace />} />
+      <Route path="/blog-details" element={<Navigate to="/service" replace />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/project-1" element={<Project1Page />} />
       <Route path="/project-2" element={<Project2Page />} />
