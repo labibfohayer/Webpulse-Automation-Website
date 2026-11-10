@@ -209,7 +209,7 @@ export const ReaPage: React.FC<ReaPageProps> = ({ html }) => {
       if (customServiceField) customServiceField.style.display = 'none';
       if (serviceDropdown) {
         const currentSpan = serviceDropdown.querySelector('.current');
-        if (currentSpan) currentSpan.textContent = 'Website Automation (ওয়েবসাইট অটোমেশন)';
+        if (currentSpan) currentSpan.textContent = 'Website Automation';
       }
       if (selectedServiceInput) selectedServiceInput.value = 'Website Automation';
     };

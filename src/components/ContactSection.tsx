@@ -215,13 +215,13 @@ export const ContactSection: React.FC = () => {
                         outline: 'none'
                       }}
                     >
-                      <option value="Website Automation">Website Automation (ওয়েবসাইট অটোমেশন)</option>
-                      <option value="Page Automation">Page Automation (পেজ অটোমেশন)</option>
-                      <option value="Website Making">Website Making (ওয়েবসাইট মেকিং)</option>
-                      <option value="Web Development">Web Development (ওয়েব ডেভেলপমেন্ট)</option>
-                      <option value="Web Design">Web Design (ওয়েব ডিজাইন)</option>
-                      <option value="UI/UX Design">UI/UX Design (ইউআই ইউএক্স ডিজাইন)</option>
-                      <option value="Other">Other / Custom Service (অন্য কিছু / কাস্টম সার্ভিস)</option>
+                      <option value="Website Automation">Website Automation</option>
+                      <option value="Page Automation">Page Automation</option>
+                      <option value="Website Making">Website Making</option>
+                      <option value="Web Development">Web Development</option>
+                      <option value="Web Design">Web Design</option>
+                      <option value="UI/UX Design">UI/UX Design</option>
+                      <option value="Other">Other / Custom Service</option>
                     </select>
                   </fieldset>
                 </div>
@@ -229,7 +229,7 @@ export const ContactSection: React.FC = () => {
                 {formData.subject === 'Other' && (
                   <fieldset style={{ border: 'none', padding: 0, margin: 0 }}>
                     <label htmlFor="custom_subject" className="text-body-2 letter-space--2 fw-5 title-input" style={{ display: 'block', color: '#aaa', fontSize: '14px', marginBottom: '8px' }}>
-                      Specify Custom Service / কাস্টম সার্ভিস লিখুন
+                      Specify Custom Service
                     </label>
                     <input
                       type="text"
