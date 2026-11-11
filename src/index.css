@@ -314,6 +314,74 @@ html {
 }
 
 /* =========================================================
+   CONTACT CARDS (SEND US EMAIL & NEED HELP) OVERFLOW FIX
+   ========================================================= */
+
+.contact-card {
+  max-width: 270px !important;
+  width: 250px !important;
+  min-width: 230px !important;
+  flex: 0 0 auto !important;
+  box-sizing: border-box !important;
+  padding: 16px 12px 14px !important;
+  border-radius: 14px !important;
+}
+
+.contact-card .top-card {
+  margin-bottom: 12px !important;
+  padding-left: 4px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+}
+
+.contact-card .top-card i {
+  font-size: 20px !important;
+}
+
+.contact-card .top-card p {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  margin: 0 !important;
+  letter-spacing: -0.01em !important;
+}
+
+.contact-card .link {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  padding: 10px 8px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  line-height: 1 !important;
+  color: #111827 !important;
+  background-color: #ffffff !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  box-sizing: border-box !important;
+  letter-spacing: -0.01em !important;
+  border-radius: 10px !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+.contact-card .link:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18) !important;
+}
+
+@media (max-width: 575px) {
+  .contact-card {
+    max-width: 100% !important;
+    width: 100% !important;
+    min-width: 100% !important;
+  }
+}
+
+/* =========================================================
    A-TO-Z MOBILE RESPONSIVE OPTIMIZATIONS (Smartphones & Tablets)
    ========================================================= */
 
