@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 export const FloatingWidgets: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
 
-  const whatsappUrl = "https://wa.me/8801580506445?text=Hi%20Webpulse%20Automation!%20I%20would%20like%20to%20discuss%20a%20project.";
+  const whatsappUrl = "https://wa.me/8801908272574?text=Hi%20Webpulse%20Automation!%20I%20would%20like%20to%20discuss%20a%20project.";
 
   return (
     <div className="webpulse-floating-whatsapp" style={{ position: 'fixed', bottom: '28px', right: '28px', zIndex: 99999, fontFamily: 'var(--font-dm-sans, sans-serif)' }}>

@@ -34,7 +34,7 @@ export const Footer: React.FC = () => {
               Architecting High-Speed Websites &amp; <br />
               Autonomous <span style={{ color: '#00d2ff', fontStyle: 'italic' }}>AI Workflows</span>
             </p>
-            <a className="tf-btn style-big style-white" href="https://wa.me/8801580506445" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+            <a className="tf-btn style-big style-white" href="https://wa.me/8801908272574" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
               <span className="text-btn">Book a Strategy Call</span>
               <span className="icon-btn">
                 <i className="icon-arrow-right"></i>
@@ -47,7 +47,7 @@ export const Footer: React.FC = () => {
               <span style={{ color: '#444' }}>•</span>
               <a href="https://github.com/webpulseautomation" target="_blank" rel="noopener noreferrer" style={{ color: '#00d2ff', textDecoration: 'none', fontSize: '14px' }}>GitHub</a>
               <span style={{ color: '#444' }}>•</span>
-              <a href="https://wa.me/8801580506445" target="_blank" rel="noopener noreferrer" style={{ color: '#25d366', textDecoration: 'none', fontSize: '14px' }}>WhatsApp</a>
+              <a href="https://wa.me/8801908272574" target="_blank" rel="noopener noreferrer" style={{ color: '#25d366', textDecoration: 'none', fontSize: '14px' }}>WhatsApp</a>
             </div>
           </div>
 

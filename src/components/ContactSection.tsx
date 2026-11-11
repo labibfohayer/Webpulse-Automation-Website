@@ -86,8 +86,8 @@ export const ContactSection: React.FC = () => {
                     Need help!
                   </p>
                 </div>
-                <a href="tel:+8801580506445" className="link text-body-2 letter-space--3 fw-6" style={{ color: '#fff', textDecoration: 'none', fontSize: '14px' }}>
-                  +8801580506445
+                <a href="tel:+8801908272574" className="link text-body-2 letter-space--3 fw-6" style={{ color: '#fff', textDecoration: 'none', fontSize: '14px' }}>
+                  +8801908272574
                 </a>
               </div>
             </div>

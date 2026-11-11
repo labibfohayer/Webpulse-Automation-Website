@@ -119,7 +119,7 @@ export const Navbar: React.FC = () => {
 
             <div className="header-right d-flex align-items-center g-20">
               <div className="d-sm-block d-none">
-                <a href="https://wa.me/8801580506445" target="_blank" rel="noopener noreferrer" className="tf-btn style-gradient-2" style={{ textDecoration: 'none' }}>
+                <a href="https://wa.me/8801908272574" target="_blank" rel="noopener noreferrer" className="tf-btn style-gradient-2" style={{ textDecoration: 'none' }}>
                   <span className="text-btn">Book a Call</span>
                   <span className="icon-btn">
                     <i className="icon-arrow-right"></i>

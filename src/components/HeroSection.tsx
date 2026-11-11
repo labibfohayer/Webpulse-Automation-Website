@@ -82,7 +82,7 @@ export const HeroSection: React.FC = () => {
             </p>
 
             <div className="title-animation" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
-              <a className="tf-btn style-big style-gradient-2" href="https://wa.me/8801580506445" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
+              <a className="tf-btn style-big style-gradient-2" href="https://wa.me/8801908272574" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none' }}>
                 <span className="text-btn">Book a Strategy Call</span>
                 <span className="icon-btn">
                   <i className="icon-arrow-right"></i>

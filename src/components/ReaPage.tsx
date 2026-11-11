@@ -280,7 +280,7 @@ export const ReaPage: React.FC<ReaPageProps> = ({ html }) => {
         const waMsg = encodeURIComponent(
           `Hi Webpulse Automation! My name is ${name}. Email: ${email}, Phone: ${phone}. Service: ${finalService}. Inquiry: ${message}`
         );
-        const waUrl = `https://wa.me/8801580506445?text=${waMsg}`;
+        const waUrl = `https://wa.me/8801908272574?text=${waMsg}`;
 
         // Show luxury modal
         const modal = document.createElement('div');
