@@ -63,8 +63,8 @@ export const ContactSection: React.FC = () => {
                     Send Us Email
                   </p>
                 </div>
-                <a href="mailto:jayanaram07@gmail.com" className="link text-body-2 letter-space--3 fw-6" style={{ color: '#fff', textDecoration: 'none', fontSize: '14px' }}>
-                  jayanaram07@gmail.com
+                <a href="mailto:zayanarham07@gmail.com" className="link text-body-2 letter-space--3 fw-6" style={{ color: '#fff', textDecoration: 'none', fontSize: '14px' }}>
+                  zayanarham07@gmail.com
                 </a>
               </div>
 
@@ -86,8 +86,8 @@ export const ContactSection: React.FC = () => {
                     Need help!
                   </p>
                 </div>
-                <a href="tel:01908272574" className="link text-body-2 letter-space--3 fw-6" style={{ color: '#fff', textDecoration: 'none', fontSize: '14px' }}>
-                  01908272574
+                <a href="tel:+8801580506445" className="link text-body-2 letter-space--3 fw-6" style={{ color: '#fff', textDecoration: 'none', fontSize: '14px' }}>
+                  +8801580506445
                 </a>
               </div>
             </div>
