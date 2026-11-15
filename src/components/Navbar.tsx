@@ -103,7 +103,6 @@ export const Navbar: React.FC = () => {
                     </a>
                     <div className="sub-menu" style={{ display: activeDropdown === 'pages' ? 'block' : undefined }}>
                       <ul className="sub-menu_list">
-                        <li><Link className="sub-menu_link" to="/team">Team</Link></li>
                         <li><Link className="sub-menu_link" to="/faq">FAQ</Link></li>
                       </ul>
                     </div>
@@ -218,11 +217,6 @@ export const Navbar: React.FC = () => {
                 </Link>
               </li>
 
-              <li>
-                <Link to="/team" style={{ color: '#fff', textDecoration: 'none', fontSize: '18px', fontWeight: 600 }}>
-                  Our Team
-                </Link>
-              </li>
               <li>
                 <Link to="/faq" style={{ color: '#fff', textDecoration: 'none', fontSize: '18px', fontWeight: 600 }}>
                   FAQ

@@ -6,7 +6,6 @@ import { initLenis, getLenis } from './utils/lenis';
 import { HomePage } from './pages/HomePage';
 import { AboutPage } from './pages/AboutPage';
 import { ServicesPage } from './pages/ServicesPage';
-import { TeamPage } from './pages/TeamPage';
 import { FaqPage } from './pages/FaqPage';
 import { BlogPage } from './pages/BlogPage';
 import { ContactPage } from './pages/ContactPage';

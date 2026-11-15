@@ -60,7 +60,6 @@ export const Footer: React.FC = () => {
                 { name: 'AI Startup', path: '/ai-startup' },
                 { name: 'About Company', path: '/about' },
                 { name: 'Our Services', path: '/service' },
-                { name: 'Team Members', path: '/team' },
                 { name: 'FAQ', path: '/faq' },
                 { name: 'Contact Us', path: '/contact' }
               ].map((item, i) => (
