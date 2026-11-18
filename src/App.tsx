@@ -71,9 +71,9 @@ const AppContent: React.FC = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/index-dark" element={<HomePage />} />
+      <Route path="/index-dark" element={<Navigate to="/" replace />} />
       <Route path="/ai-startup" element={<AiStartupPage />} />
-      <Route path="/ai-startup-dark" element={<AiStartupPage />} />
+      <Route path="/ai-startup-dark" element={<Navigate to="/ai-startup" replace />} />
       <Route path="/about" element={<AboutPage />} />
       <Route path="/service" element={<ServicesPage />} />
       <Route path="/service-details/:slug" element={<ServiceDetailsPage />} />
