@@ -103,7 +103,9 @@ export const Navbar: React.FC = () => {
                     </a>
                     <div className="sub-menu" style={{ display: activeDropdown === 'pages' ? 'block' : undefined }}>
                       <ul className="sub-menu_list">
+                        <li><Link className="sub-menu_link" to="/service-details/intelligent-process-automation">Service Details</Link></li>
                         <li><Link className="sub-menu_link" to="/faq">FAQ</Link></li>
+                        <li><Link className="sub-menu_link" to="/project-1">Projects</Link></li>
                       </ul>
                     </div>
                   </li>

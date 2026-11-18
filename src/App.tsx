@@ -86,7 +86,11 @@ const AppContent: React.FC = () => {
       <Route path="/blog-details" element={<Navigate to="/service" replace />} />
       <Route path="/contact" element={<ContactPage />} />
       <Route path="/project-1" element={<Project1Page />} />
-      <Route path="/project-2" element={<Project2Page />} />
+      <Route path="/projects" element={<Navigate to="/project-1" replace />} />
+      <Route path="/project-2" element={<Navigate to="/project-1" replace />} />
+      <Route path="/project-details/:slug" element={<Navigate to="/project-1" replace />} />
+      <Route path="/project-details" element={<Navigate to="/project-1" replace />} />
+      <Route path="/404" element={<Navigate to="/" replace />} />
       {/* Catch-all fallback */}
       <Route path="*" element={<HomePage />} />
     </Routes>
