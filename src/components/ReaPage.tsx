@@ -28,6 +28,48 @@ export const ReaPage: React.FC<ReaPageProps> = ({ html }) => {
   }, [html]);
 
   useEffect(() => {
+    // Synchronize active nav link based on current path
+    const currentPath = window.location.pathname;
+    const desktopLinks = containerRef.current?.querySelectorAll<HTMLAnchorElement>('.box-nav-menu .item-link');
+    const mobileLinks = containerRef.current?.querySelectorAll<HTMLAnchorElement>('.nav-ul-mb .mb-menu-link');
+
+    const updateActiveNav = (links: NodeListOf<HTMLAnchorElement> | undefined) => {
+      if (!links) return;
+      links.forEach(link => {
+        const href = link.getAttribute('href');
+        const text = link.textContent?.trim().toLowerCase();
+
+        link.classList.remove('active');
+
+        if (currentPath === '/service' || currentPath === '/service/') {
+          if (href === '/service' || text === 'services' || text === 'service') {
+            link.classList.add('active');
+          }
+        } else if (currentPath === '/about' || currentPath === '/about/') {
+          if (href === '/about' || text === 'about') {
+            link.classList.add('active');
+          }
+        } else if (currentPath === '/contact' || currentPath === '/contact/') {
+          if (href === '/contact' || text === 'contact') {
+            link.classList.add('active');
+          }
+        } else if (currentPath === '/' || currentPath === '/ai-startup' || currentPath === '/index-dark') {
+          if (href === '#' && text === 'home') {
+            link.classList.add('active');
+          }
+        } else if (['/faq', '/project-1', '/projects', '/service-details'].some(p => currentPath.startsWith(p))) {
+          if (text === 'pages') {
+            link.classList.add('active');
+          }
+        }
+      });
+    };
+
+    updateActiveNav(desktopLinks);
+    updateActiveNav(mobileLinks);
+  }, [html]);
+
+  useEffect(() => {
     // 2. Header Sticky logic
     const header = document.querySelector<HTMLElement>('.header-fixed');
     const stickyTops = document.querySelectorAll<HTMLElement>('.sticky-top');
