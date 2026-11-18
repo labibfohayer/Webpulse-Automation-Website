@@ -841,15 +841,29 @@ body:not(.body-style-dark) .header-fixed:not(.header-sticky) .mobile-button span
   transition: none !important;
 }
 
-/* Ensure next section has solid background to cleanly transition over the hero */
+@media (max-width: 767px) {
+  .wg-hero-area:not(.style-2) .image-hero {
+    max-width: 290px !important;
+    top: 42% !important;
+    bottom: auto !important;
+    left: 50% !important;
+    transform: translate(-50%, -30%) !important;
+    z-index: 1 !important;
+    opacity: 0.65;
+  }
+}
+
+/* Ensure next section acts as a rising curtain floating cleanly over the locked hero */
 .main-content {
   position: relative;
   z-index: 10;
   background-color: #ffffff;
+  box-shadow: 0 -25px 60px rgba(0, 0, 0, 0.25);
 }
 
 body.body-style-dark .main-content {
   background-color: #131313 !important;
+  box-shadow: 0 -25px 60px rgba(0, 0, 0, 0.65);
 }
 
 

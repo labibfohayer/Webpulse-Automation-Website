@@ -447,51 +447,66 @@ export function initSiteAnimations(): () => void {
     console.warn('Swiper init error:', err);
   }
 
-  // 10. Hero Section Scrollytelling: Robot stays static in place, text scrolls upwards & away
+  // Expose for debugging & runtime inspection
+  (window as any).gsap = gsap;
+  (window as any).ScrollTrigger = ScrollTrigger;
+
+  // 10. Hero Section: Sticky Curtain Reveal
+  // Text scrolls up & vanishes first; then white curtain (.main-content) rises to cover the stationary robot
   const heroSection = document.querySelector<HTMLElement>('.wg-hero-area:not(.style-2)');
-  if (heroSection) {
+  const mainContent = document.querySelector<HTMLElement>('.main-content');
+
+  if (heroSection && mainContent) {
     const topHero = heroSection.querySelector<HTMLElement>('.top-hero-area');
     const leftContent = heroSection.querySelector<HTMLElement>('.left-content');
     const quoteCard = heroSection.querySelector<HTMLElement>('.wg-quote-2');
-    const robotImg = heroSection.querySelector<HTMLElement>('.image-hero');
 
-    // Only on desktop/tablet (>=768px) where the 3-column robot layout is displayed
-    if (window.innerWidth >= 768) {
-      const heroTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: heroSection,
-          start: 'top top',
-          end: '+=500',
-          pin: true,
-          scrub: 0.8,
-          anticipatePin: 1,
-          invalidateOnRefresh: true,
-        }
-      });
+    // 1. Pin hero in place with pinSpacing: false so .main-content scrolls over it like a curtain
+    ScrollTrigger.create({
+      trigger: heroSection,
+      start: 'top top',
+      endTrigger: mainContent,
+      end: 'top top',
+      pin: true,
+      pinSpacing: false,
+      anticipatePin: 1,
+      invalidateOnRefresh: true,
+    });
 
-      if (topHero) {
-        heroTl.to(topHero, {
-          y: -160,
-          opacity: 0,
-          ease: 'power1.inOut',
-        }, 0);
+    // 2. Text elements scroll up and fade away FIRST (completing early before curtain covers robot)
+    const textScrollDist = Math.min(240, window.innerHeight * 0.3);
+    const textTl = gsap.timeline({
+      scrollTrigger: {
+        trigger: heroSection,
+        start: 'top top',
+        end: `+=${textScrollDist}`,
+        scrub: 0.5,
+        invalidateOnRefresh: true,
       }
+    });
 
-      if (leftContent) {
-        heroTl.to(leftContent, {
-          y: -220,
-          opacity: 0,
-          ease: 'power1.inOut',
-        }, 0);
-      }
+    if (topHero) {
+      textTl.to(topHero, {
+        y: -150,
+        opacity: 0,
+        ease: 'power2.in',
+      }, 0);
+    }
 
-      if (quoteCard) {
-        heroTl.to(quoteCard, {
-          y: -220,
-          opacity: 0,
-          ease: 'power1.inOut',
-        }, 0);
-      }
+    if (leftContent) {
+      textTl.to(leftContent, {
+        y: -220,
+        opacity: 0,
+        ease: 'power2.in',
+      }, 0);
+    }
+
+    if (quoteCard) {
+      textTl.to(quoteCard, {
+        y: -220,
+        opacity: 0,
+        ease: 'power2.in',
+      }, 0);
     }
   }
 
