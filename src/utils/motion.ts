@@ -332,18 +332,22 @@ export function initSiteAnimations(): () => void {
         return;
       }
 
-      // Project Swiper
+      // Project Swiper (120fps Silky Smooth Autoplay Carousel)
       if (el.classList.contains('sw-project')) {
         const swiper = new Swiper(el, {
           modules: [Pagination, Autoplay, Navigation],
           slidesPerView: 1,
           spaceBetween: 15,
           loop: true,
+          speed: 1200,
           autoplay: {
-            delay: 4000,
+            delay: 2200,
             disableOnInteraction: false,
             pauseOnMouseEnter: true,
           },
+          grabCursor: true,
+          roundLengths: true,
+          watchSlidesProgress: true,
           pagination: paginationEl ? {
             el: paginationEl,
             clickable: true,

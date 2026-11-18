@@ -764,6 +764,58 @@ body:not(.body-style-dark) .header-fixed:not(.header-sticky) .mobile-button span
   }
 }
 
+/* ==========================================================================
+   Featured Projects 120fps Silky Smooth Swiper Carousel
+   ========================================================================== */
+.sw-project {
+  overflow: hidden !important;
+  contain: paint layout;
+}
+
+.sw-project .swiper-wrapper {
+  display: flex !important;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  perspective: 1000px;
+  transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+.sw-project .swiper-slide {
+  height: auto !important;
+  will-change: transform;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  transform: translate3d(0, 0, 0);
+}
+
+.sw-project .swiper-slide .project-item {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  will-change: transform;
+}
+
+/* Silky smooth pagination indicator */
+.sw-project + .sw-dot-pagination .swiper-pagination-bullet,
+.section-project .tf-sw-pagination .swiper-pagination-bullet {
+  transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1) !important;
+  opacity: 0.35;
+}
+
+.sw-project + .sw-dot-pagination .swiper-pagination-bullet-active,
+.section-project .tf-sw-pagination .swiper-pagination-bullet-active {
+  opacity: 1;
+  width: 24px !important;
+  border-radius: 6px !important;
+  background: #fc7028 !important;
+}
+
+
 
 
 
