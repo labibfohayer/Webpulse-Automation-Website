@@ -815,6 +815,44 @@ body:not(.body-style-dark) .header-fixed:not(.header-sticky) .mobile-button span
   background: #fc7028 !important;
 }
 
+/* ==========================================================================
+   Hero Section Scrollytelling Pin & Sticky Robot Effect
+   ========================================================================== */
+.wg-hero-area:not(.style-2) {
+  position: relative;
+  overflow: visible !important;
+}
+
+.wg-hero-area:not(.style-2) .image-hero,
+.wg-hero-area:not(.style-2) .image-absolute {
+  will-change: transform;
+  z-index: 2;
+}
+
+.wg-hero-area:not(.style-2) .top-hero-area,
+.wg-hero-area:not(.style-2) .left-content,
+.wg-hero-area:not(.style-2) .wg-quote-2 {
+  position: relative;
+  z-index: 5;
+  will-change: transform, opacity;
+}
+
+.wg-hero-area:not(.style-2) .wg-quote-2.active-animate {
+  transition: none !important;
+}
+
+/* Ensure next section has solid background to cleanly transition over the hero */
+.main-content {
+  position: relative;
+  z-index: 10;
+  background-color: #ffffff;
+}
+
+body.body-style-dark .main-content {
+  background-color: #131313 !important;
+}
+
+
 
 
 

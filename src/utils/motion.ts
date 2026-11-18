@@ -447,6 +447,54 @@ export function initSiteAnimations(): () => void {
     console.warn('Swiper init error:', err);
   }
 
+  // 10. Hero Section Scrollytelling: Robot stays static in place, text scrolls upwards & away
+  const heroSection = document.querySelector<HTMLElement>('.wg-hero-area:not(.style-2)');
+  if (heroSection) {
+    const topHero = heroSection.querySelector<HTMLElement>('.top-hero-area');
+    const leftContent = heroSection.querySelector<HTMLElement>('.left-content');
+    const quoteCard = heroSection.querySelector<HTMLElement>('.wg-quote-2');
+    const robotImg = heroSection.querySelector<HTMLElement>('.image-hero');
+
+    // Only on desktop/tablet (>=768px) where the 3-column robot layout is displayed
+    if (window.innerWidth >= 768) {
+      const heroTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: heroSection,
+          start: 'top top',
+          end: '+=500',
+          pin: true,
+          scrub: 0.8,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        }
+      });
+
+      if (topHero) {
+        heroTl.to(topHero, {
+          y: -160,
+          opacity: 0,
+          ease: 'power1.inOut',
+        }, 0);
+      }
+
+      if (leftContent) {
+        heroTl.to(leftContent, {
+          y: -220,
+          opacity: 0,
+          ease: 'power1.inOut',
+        }, 0);
+      }
+
+      if (quoteCard) {
+        heroTl.to(quoteCard, {
+          y: -220,
+          opacity: 0,
+          ease: 'power1.inOut',
+        }, 0);
+      }
+    }
+  }
+
   setTimeout(() => {
     ScrollTrigger.refresh();
   }, 250);
