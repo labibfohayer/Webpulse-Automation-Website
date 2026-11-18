@@ -686,5 +686,84 @@ body:not(.body-style-dark) .header-fixed:not(.header-sticky) .mobile-button span
   transform: scale(1.05) !important;
 }
 
+/* ==========================================================================
+   Homepage Footer 100vh Viewport Proportion Optimization
+   Scales footer ratio so the entire section (marquee to copyright) fits
+   cleanly within the desktop viewport screen height without overflowing.
+   ========================================================================== */
+@media (min-width: 992px) {
+  .footer.style-2 {
+    box-sizing: border-box !important;
+    min-height: 100vh !important;
+    max-height: 100vh !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    padding-top: clamp(16px, 2.5vh, 28px) !important;
+    padding-bottom: 0 !important;
+    position: relative !important;
+    overflow: hidden !important;
+  }
+
+  .footer.style-2 > .container {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+  }
+
+  .footer.style-2 .top-footer {
+    padding: 0 !important;
+  }
+
+  .footer.style-2 .top-footer .marque-text-item .h1 {
+    font-size: clamp(24px, 2.2vw, 38px) !important;
+    line-height: 1.25 !important;
+  }
+
+  .footer.style-2 .middle-footer {
+    padding-top: clamp(14px, 2.5vh, 28px) !important;
+    padding-bottom: clamp(10px, 2vh, 20px) !important;
+  }
+
+  .footer.style-2 .about-footer .title {
+    margin-bottom: clamp(10px, 1.8vh, 18px) !important;
+    font-size: clamp(18px, 1.6vw, 26px) !important;
+    line-height: 1.25 !important;
+  }
+
+  .footer.style-2 .about-footer .logo-footer {
+    margin-bottom: clamp(10px, 1.6vh, 18px) !important;
+  }
+
+  .footer.style-2 .footer-content .content {
+    margin-top: clamp(8px, 1.2vh, 14px) !important;
+  }
+
+  .footer.style-2 .footer-content li {
+    margin-bottom: clamp(4px, 0.8vh, 8px) !important;
+    font-size: clamp(13px, 0.95vw, 15px) !important;
+  }
+
+  .footer.style-2 .footer-content.footer-newsletter .desc-newsletter {
+    margin-bottom: clamp(10px, 1.5vh, 16px) !important;
+    font-size: clamp(13px, 0.95vw, 15px) !important;
+  }
+
+  .footer.style-2 .big-text-footer {
+    font-size: clamp(24px, 6.5vw, 95px) !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    padding-top: clamp(8px, 1.5vh, 16px) !important;
+    padding-bottom: clamp(8px, 1.5vh, 16px) !important;
+  }
+
+  .footer.style-2 .bottom-footer {
+    padding-top: clamp(12px, 2vh, 20px) !important;
+    padding-bottom: clamp(14px, 2.2vh, 22px) !important;
+  }
+}
+
+
 
 
