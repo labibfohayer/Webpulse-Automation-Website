@@ -1,5 +1,7 @@
 # ⚡ Webpulse Automation — Next-Gen Web Engineering & AI Business Workflows
 
+[![Live Platform](https://img.shields.io/badge/Live_Platform-webpulseautomation.pages.dev-success?style=for-the-badge&logo=cloudflare&logoColor=white)](https://webpulseautomation.pages.dev/)
+
 <p align="center">
   <img src="public/assets/images/logo/logo.svg" alt="Webpulse Automation" width="220" />
 </p>
@@ -78,7 +80,7 @@ npm install
 npm run dev
 ```
 
-The dev server will run locally at `http://localhost:5173/`.
+The dev server will run locally at `http://localhost:5173/`. The live production agency platform is deployed at **[webpulseautomation.pages.dev](https://webpulseautomation.pages.dev/)**.
 
 ### Production Build & Preview
 
